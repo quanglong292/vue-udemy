@@ -3,7 +3,7 @@
     <header>
       <h1>My Friends {{ friends[0].name }}</h1>
     </header>
-
+    <NewFriend @new-friend="addNewFriend" />
     <ul>
       <FriendContact
         v-for="item in friends"
@@ -14,6 +14,7 @@
         :email-address="item.email"
         :isFavorite="item.favorite"
         @toggle-favorite="toggleFavorite"
+        @delete="deleteFriend"
       />
     </ul>
   </section>
@@ -21,10 +22,12 @@
 
 <script>
 import FriendContact from "./components/FriendContact";
+import NewFriend from "./components/NewFriend";
 
 export default {
   components: {
     FriendContact,
+    NewFriend,
   },
   data: () => ({
     friends: [
@@ -56,6 +59,12 @@ export default {
       const index = this.friends.findIndex(item => item.id === id)
       console.log(this.friends[index].favorite)
       this.friends[index].favorite = !this.friends[index].favorite
+    },
+    addNewFriend (friend) {
+      this.friends.push(friend)
+    },
+    deleteFriend (id) {
+      this.friends = this.friends.filter(item => item.id !== id)
     }
   }
 };
@@ -107,6 +116,7 @@ header {
   border-bottom: 4px solid #ccc;
   color: #58004d;
   margin: 0 0 1rem 0;
+  text-align: center;
 }
 
 #app button {
